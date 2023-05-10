@@ -24,18 +24,22 @@ function copyDir(source, destination){
       });
     });
   });
-  fs.readdir(destination, (err, files)=>{
-    files.forEach(file=>{
-      fs.access(path.join(__dirname, 'files', file), fs.constants.F_OK, (err) => {
-        if (err) {
-          fs.unlink(path.join(__dirname, 'files-copy', file), (err) => {
+  fs.access(destination, fs.constants.F_OK, (err)=> {
+    if (!err) {
+      fs.readdir(destination, (err, files) => {
+        files.forEach(file => {
+          fs.access(path.join(__dirname, 'files', file), fs.constants.F_OK, (err) => {
             if (err) {
-              console.error('Ошибка при удалении файла:', err);
+              fs.unlink(path.join(__dirname, 'files-copy', file), (err) => {
+                if (err) {
+                  console.error('Ошибка при удалении файла:', err);
+                }
+              });
             }
           });
-        }
+        });
       });
-    });
+    }
   });
 }
 
