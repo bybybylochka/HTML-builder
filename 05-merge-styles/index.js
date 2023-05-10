@@ -5,7 +5,15 @@ const path = require('path');
 
 const folderPath = path.join(__dirname, 'styles');
 
-
+fs.access(path.join(__dirname, 'project-dist', 'bundle.css'), fs.constants.F_OK, (err)=>{
+  if(!err){
+    fs.writeFile(path.join(__dirname, 'project-dist', 'bundle.css'), '', (err)=>{
+      if(err){
+        console.log('Ошибка очистки файла');
+      }
+    });
+  }
+});
 fsPromise.readdir(folderPath)
   .then((files) => {
     files.forEach((file) => {
